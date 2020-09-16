@@ -1,0 +1,29 @@
+﻿version: '3'
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    container_name: sqlserver
+    volumes:
+      - sqlproductdata:/var/opt/mssql 
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y 
+      - MSSQL_PID=Developer
+      - SA_PASSWORD=Developer@2020
+
+  productapi:
+    image: product/productapi:1.0
+    build: ProductAPI
+    depends_on:
+      - sqlserver
+    ports:
+      - "6100:6100"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+volumes:
+  sqlproductdata:
+    external: true    
+

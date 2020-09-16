@@ -1,0 +1,86 @@
+========================================================================
+Code Req : .Net core 3.1 (must)
+
+
+for Docker 
+
+
+
+==========================Docker Build=================
+docker build -t product/productapi:1.0
+
+============= Volume=====================
+docker volume create --name=sqlserverdata
+==========================================
+==========================================
+docker-compose up -d 
+===========================================
+Run attached script to insert data into ProductTable after first succesful  run/migration.
+==========================================================================================
+
+
+
+
+To run without Docker :
+
+
+1. change DB connection from  development/production appsettings.
+2. register user using register api.
+
+curl --location --request POST 'http://localhost:6100/api/Auth/Register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "Username":"test",
+    "Password":"123456" 
+}'
+
+3.generate jwt token for authenticate user after login 
+
+curl --location --request POST 'http://localhost:6100/api/Auth/Login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "Username":"test",
+    "Password":"123456" 
+}'
+
+3. Use Jwt Token to authorize Product API's
+
+curl --location --request GET 'http://localhost:6100/api/product/' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJiaGFudSIsIm5iZiI6MTYwMDI1NDY0OCwiZXhwIjoxNjAwMzQxMDQ4LCJpYXQiOjE2MDAyNTQ2NDh9.O1pXUQemAdr0SveVwEojw5p5GKAzNjH0hE6L98OMwU2mpSj3Y3ErH58VH-pYskmJb-cHdKc-ODrlmzlT4SywvQ'
+
+
+Other API's :
+=>  Get Product By Id 
+
+curl --location --request GET 'http://localhost:6100/api/product/getproductbyid/3' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJiaGFudSIsIm5iZiI6MTYwMDI1NDY0OCwiZXhwIjoxNjAwMzQxMDQ4LCJpYXQiOjE2MDAyNTQ2NDh9.O1pXUQemAdr0SveVwEojw5p5GKAzNjH0hE6L98OMwU2mpSj3Y3ErH58VH-pYskmJb-cHdKc-ODrlmzlT4SywvQ'
+
+=> Get Product By Name
+curl --location --request GET 'http://localhost:6100/api/Product/getproductbyname/Security' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJiaGFudSIsIm5iZiI6MTYwMDI1NDY0OCwiZXhwIjoxNjAwMzQxMDQ4LCJpYXQiOjE2MDAyNTQ2NDh9.O1pXUQemAdr0SveVwEojw5p5GKAzNjH0hE6L98OMwU2mpSj3Y3ErH58VH-pYskmJb-cHdKc-ODrlmzlT4SywvQ' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-binary '@'
+
+
+
+=> Find (Search) 
+
+curl --location --request GET 'http://localhost:6100/api/product/find/Security' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJiaGFudSIsIm5iZiI6MTYwMDI1NDY0OCwiZXhwIjoxNjAwMzQxMDQ4LCJpYXQiOjE2MDAyNTQ2NDh9.O1pXUQemAdr0SveVwEojw5p5GKAzNjH0hE6L98OMwU2mpSj3Y3ErH58VH-pYskmJb-cHdKc-ODrlmzlT4SywvQ'
+
+
+
+Not Implemented : Filter/Paging  (Half baked) 
+
+Apart from This :
+--caching Implemented ()
+
+
+==============================================================================
+
+
+
+
